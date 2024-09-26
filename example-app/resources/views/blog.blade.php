@@ -14,12 +14,12 @@
     @else
         <h1>List of posts:</h1>
         @foreach ($posts as $post)
-            <h2><?=$post['title']?></h2>
+            <h2>{{$post['title']}}</h2>
             <p><strong><?=$post['author']?></strong></p>
             <p><i><?=$post['description']?></i></p>
             <p><a href="./blog.php?id=<?=$post['id']?>" >Részletek elolvasása</a></p>        
         @endforeach
     @endif
-    
+
   </body>
 </html>
