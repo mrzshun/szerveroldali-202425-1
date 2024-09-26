@@ -1,5 +1,6 @@
 {
     "require": {
-        "fakerphp/faker": "^1.23"
+        "fakerphp/faker": "^1.23",
+        "rakibtg/sleekdb": "^2.15"
     }
 }
