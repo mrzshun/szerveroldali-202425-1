@@ -15,9 +15,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(10)->create();
-        Post::factory(10)->create();
-        Category::factory(10)->create();
+        $users = User::factory(10)->create();
+        $posts = Post::factory(10)->create();
+        $categories = Category::factory(10)->create();
+
+        foreach($posts as $post) {
+            $post->author()->associate($users->random())->save();
+            $post->categories()->sync(
+                $categories->random(rand(1,$categories->count()))
+            );
+        }
 
         // User::factory()->create([
         //     'name' => 'Test User',

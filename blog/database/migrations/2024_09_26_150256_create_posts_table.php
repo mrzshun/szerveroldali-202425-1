@@ -19,6 +19,8 @@ return new class extends Migration
             $table->text('text');
             $table->boolean('hidden')->default(false);
             //author - a poszt szerzője
+            $table->unsignedBigInteger('author_id')->nullable();
+            $table->foreign('author_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
