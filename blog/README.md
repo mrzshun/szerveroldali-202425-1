@@ -1,66 +1,66 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Blog Basic Assets
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Előre elkészített frontend oldali elemek a Blog feladathoz.
 
-## About Laravel
+## Telepítés
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+1. Hozz létre egy új Laravel projektet, pl. `blog` néven:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+    ```shell
+    composer create-project --prefer-dist laravel/laravel blog
+    ```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+    Ezt követően lépj be a projekt mappájába:
 
-## Learning Laravel
+    ```shell
+    cd blog
+    ```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+2. Telepítsd a Laravel UI (User Interface)-t:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+    ```shell
+    composer require laravel/ui
+    ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+3. A Laravel UI csak egy parancsot tesz elérhetővé, önmagában nem hoz létre semmilyen UI-t, azt neked kell a Laravel UI által bevezetett parancs segítségével létrehoznod. Az alábbi parancsot add ki, hogy Bootstrap 5-tel inicializálja a felhasználói felületet:
 
-## Laravel Sponsors
+    ```shell
+    php artisan ui bootstrap --auth
+    ```
+    - Fontos az `--auth` kapcsoló is, mivel azzal kigenerálja a teljes layoutot.
+    - Utána kéri, hogy adj ki parancsokat, de még ne adj ki semmit, hanem kövesd továbbra is ezt az útmutatót.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+4. :warning: (Fontos) Ezen a ponton másold be az itt lévő `public`, `resources` és `routes` mappát, rekurzívan felülírva a projektben az esetleges fájlokat. Másold át a `webpack.mix.js` fájlt is.
+    - Amikor a 3. pontban kigenerálod a UI-t, akkor a `resources` mappában létrejönnek a UI-hoz tartozó blade fájlok. Ezért különösen fontos a 3. és a 4. pont egymás utánisága, vagyis az, hogy **előbb** generáld ki az alap UI-t (3. pont), és itt, a 4. pontban **írd felül** a generált fájlokat a **blog kezdőcsomag** fájljaival!
 
-### Premium Partners
+5. A Laravel UI inicializálta a `package.json`-t, azonban az npm-es csomagokat még külön telepíteni kell:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+    ```shell
+    npm i
+    ```
 
-## Contributing
+6. Továbbá szükséges még egy npm-es csomag telepítése az ikonkészlet miatt:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    ```shell
+    npm i -D @fortawesome/fontawesome-free
+    ```
 
-## Code of Conduct
+7. Ezt követően futtatni kell a Laravel Mix nevű programot. Ennek **nagyon leegyszerűsítve** az a lényege, hogy amikor a Laraveles projektedet megnyitod a böngészőben, akkor a `public` mappát tölti be, azonban mivel a `node_modules` mappát nem éred el, így onnan valahogyan át kéne kerüljenek a csomagok a `public`-ba. Ezt végzi el a Laravel Mix a `webpack.mix.json` alapján. Nyugodtan futtathatod production módban, kisebb lesz a kimenete:
+  
+    ```shell
+    npm run prod
+    ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+    - Elképzelhető, hogy első alkalommal 2x is futtatni kell a parancsot, de ezt úgyis kiírja.
 
-## Security Vulnerabilities
+8. Futtasd a Laravelt az alábbi parancs segítségével:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+    ```shell
+    php artisan serve
+    ```
 
-## License
+9. Nyisd meg a [http://localhost:8000/posts](http://localhost:8000/posts) oldalt, és ellenőrizd, hogy ezt a kimenetet látod-e:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    ![Főoldal előnézete](https://raw.githubusercontent.com/szerveroldali/blog_basic_assets/main/preview.png)
+
+    - Ha minden megjelenik, amit a képen is látsz (gombok, ikonok, stb), akkor jól dolgoztál és sikeresen inicializáltad a blog feladat alapját. :)

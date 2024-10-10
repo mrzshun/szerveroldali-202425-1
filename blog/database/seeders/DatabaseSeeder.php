@@ -20,7 +20,9 @@ class DatabaseSeeder extends Seeder
         $categories = Category::factory(10)->create();
 
         foreach($posts as $post) {
-            $post->author()->associate($users->random())->save();
+            if(rand(1,10)>5) {
+                $post->author()->associate($users->random())->save();
+            }
             $post->categories()->sync(
                 $categories->random(rand(1,$categories->count()))
             );
