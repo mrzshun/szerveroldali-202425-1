@@ -14,12 +14,12 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('posts.index',[
+        return view('posts.index', [
             'users_count' => User::count(),
             'categories_count' => Category::count(),
             'categories' => Category::all(),
             'posts' => Post::all(),
-        ]);    
+        ]);
     }
 
     /**
@@ -27,7 +27,9 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        return view('posts.create', [
+            'categories' => Category::all(),
+        ]);
     }
 
     /**
@@ -35,7 +37,14 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $validated = $request->validate(
+            [
+                'title' => 'required',
+                'description' => 'required',
+                'text' => 'required',
+            ]
+        );
     }
 
     /**
@@ -43,8 +52,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return view('posts.show',[
-        ]);    
+        return view('posts.show', []);
     }
 
     /**

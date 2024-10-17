@@ -62,3 +62,24 @@ n-n adatkapcsolat // sok-sok, n-m
 1-1 - állampolgár és személyi igazolvány
 1-sok - állampolgár és autó
 sok-sok - blogposzt - kategória
+
+Blog frontend felinstallálása:
+
+https://laravel.com/docs/11.x/frontend
+
+1. https://github.com/szerveroldali/blog_basic_assets  --> töltsük le zip-ként
+2. composer require laravel/ui --> parancsot adjuk ki
+3. php artisan ui bootstrap --auth --> parancsot futtassuk le
+4. zip kicsomagolása és a laravel projektünkbe másolása ! mindenképp merge & overwrite, ne felülcsapjuk a könyvtárainkat
+5. npm i
+6. npm i -D @fortawesome/fontawesome-free --> parancs futtatása, felteszi a fontokat
+7. npm run dev
+
+
+CSRF
+https://owasp.org/www-community/attacks/csrf
+https://laravel.com/docs/11.x/csrf
+
+Validation
+https://laravel.com/docs/11.x/validation
+https://laravel.com/docs/11.x/validation#available-validation-rules

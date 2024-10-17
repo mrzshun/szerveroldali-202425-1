@@ -13,4 +13,6 @@ class Category extends Model
     {
         return $this->belongsToMany(Post::class);
     }
+
+    public static $styles = ['primary', 'secondary','success', 'danger', 'warning', 'info', 'dark'];
 }
