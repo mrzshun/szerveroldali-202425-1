@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->text('text');
             $table->boolean('hidden')->default(false);
+            $table->string('cover_image_path')->nullable();
             //author - a poszt szerzője
             $table->unsignedBigInteger('author_id')->nullable();
             $table->foreign('author_id')->references('id')->on('users')->onDelete('cascade');
