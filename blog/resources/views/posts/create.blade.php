@@ -4,6 +4,8 @@
 @section('content')
     <div class="container">
         <h1>Create post</h1>
+        @auth
+            <p>You are authenticated</p>            
         <div class="mb-4">
             {{-- link ok --}}
             <a href="/posts"><i class="fas fa-long-arrow-alt-left"></i> Back to the homepage</a>
@@ -121,6 +123,11 @@
                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Store</button>
             </div>
         </form>
+        @endauth
+        @guest            
+            <p>You are guest, you cannot create new blogposts.</p>            
+        @endguest
+
     </div>
 @endsection
 

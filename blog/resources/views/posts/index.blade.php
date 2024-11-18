@@ -75,7 +75,7 @@
             </div>
 
             <div class="d-flex justify-content-center">
-                {{-- TODO: Pagination --}}
+                {{ $posts->links() }}
             </div>
 
         </div>
