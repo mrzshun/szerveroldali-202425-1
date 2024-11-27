@@ -4,7 +4,7 @@ use App\Http\Middleware\ForceJSONResponseAPI;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request; // !!
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -21,10 +21,10 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
-        $exceptions->render(function(NotFoundHttpException $e, Request $request) {
-            if($request->is('api/*')) {
+        $exceptions->render(function (NotFoundHttpException $e, Request $request) {
+            if ($request->is('api/*')) {
                 return response()->json([
-                    'error' => 'A kért erőforrás nem található',
+                    'error' => 'A kért erőforrás nem található.'
                 ], 404);
             }
         });
