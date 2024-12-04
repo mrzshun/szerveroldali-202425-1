@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+
 
 class ApiController extends Controller
 {
@@ -65,7 +68,7 @@ class ApiController extends Controller
             ],404);
         }
         if(Auth::attempt($validated)) {
-            $token = $user->createToken($user->email);
+            $token = $user->createToken($user->email,$user->admin ? ['blog:admin'] : []);
             return response()->json([
                 'token' => $token->plainTextToken,
             ]);
@@ -86,4 +89,64 @@ class ApiController extends Controller
     public function user(Request $request) {
         return $request->user();
     }
+
+    public function getCategories(Request $request, string $id = null) {
+        if(isset($id)) {
+            return Category::findOrFail($id);
+        }
+        return Category::all();
+    }
+
+    public function store(Request $request) {
+        $validated = $request->validate(
+            [
+                'name' => [
+                    'required',
+                    'min:5',
+                ],
+                'style' => [
+                    'required',
+                    Rule::in(Category::$styles)
+                ],
+            ],
+            [
+                'name.required' => "A név megadása kötelező!"
+            ]
+        );
+        $category = Category::factory()->create($validated);
+        return response()->json($category,201);
+    }
+
+    public function update(Request $request, $id) {
+        $validated = $request->validate(
+            [
+                'name' => [
+                    'required',
+                    'min:5',
+                ],
+                'style' => [
+                    'required',
+                    Rule::in(Category::$styles)
+                ],
+            ],
+            [
+                'name.required' => "A név megadása kötelező!"
+            ]
+        );
+        $category = Category::findOrFail($id);
+        $category->update($validated);
+        return response()->json($category,201);
+    }
+
+    public function destroy(Request $request, $id) {
+        if($request->user()->tokenCan('blog:admin')){
+            $category = Category::findOrFail($id);
+            $category->delete();
+            return response(status: 204);            
+        }
+        return response()->json([
+            'error' => 'Nincs jogosultságod a törléshez!',
+        ],403);
+    }
+
 }

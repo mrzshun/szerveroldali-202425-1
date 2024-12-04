@@ -5,8 +5,10 @@ namespace Database\Seeders;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,6 +17,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $admin = User::factory()->create([
+            'name' => 'Admin Béla',
+            'email' => 'admin@admin.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('password'),
+            'remember_token' => Str::random(10),
+            'admin' => true,
+        ]);
         $users = User::factory(10)->create();
         $posts = Post::factory(10)->create();
         $categories = Category::factory(10)->create();

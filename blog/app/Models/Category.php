@@ -15,4 +15,6 @@ class Category extends Model
     }
 
     public static $styles = ['primary', 'secondary','success', 'danger', 'warning', 'info', 'dark'];
+
+    protected $fillable = ['name','style'];
 }

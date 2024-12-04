@@ -83,3 +83,22 @@ https://laravel.com/docs/11.x/csrf
 Validation
 https://laravel.com/docs/11.x/validation
 https://laravel.com/docs/11.x/validation#available-validation-rules
+
+
+Reguláris kifejezések
+https://regex101.com/
+
+CRUD
+Create, Read, Update, Delete
+HTTP metódusok
+    GET - Read
+        /categories - mindegyik lekérdezése
+        /categories/:id/ - egy lekérdezése
+    POST - Create
+        /categories - kategória létrehozása
+    PUT - Update
+        /categories/:id/ - kategória teljes lecserélése
+    DELETE - Delete
+        /categories/:id/ - kategória törlése
+
+
