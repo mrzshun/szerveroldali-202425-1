@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
+use App\Http\Resources\PostCollection;
+use App\Http\Resources\PostResource;
 use App\Models\Category;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -97,22 +103,8 @@ class ApiController extends Controller
         return Category::all();
     }
 
-    public function store(Request $request) {
-        $validated = $request->validate(
-            [
-                'name' => [
-                    'required',
-                    'min:5',
-                ],
-                'style' => [
-                    'required',
-                    Rule::in(Category::$styles)
-                ],
-            ],
-            [
-                'name.required' => "A név megadása kötelező!"
-            ]
-        );
+    public function store(StoreCategoryRequest $request) {
+        $validated = $request->validated();
         $category = Category::factory()->create($validated);
         return response()->json($category,201);
     }
@@ -148,5 +140,48 @@ class ApiController extends Controller
             'error' => 'Nincs jogosultságod a törléshez!',
         ],403);
     }
+
+    public function getPosts(Request $request, string $id = null) {
+        if(isset($id)) {
+            return new PostResource(Post::with('categories')->with('author')->findOrFail($id));
+        }
+        return PostResource::collection(Post::with('categories')->with('author')->get());
+    }
+
+    public function postsPaginated(Request $request) {
+        return new PostCollection(Post::with('author')->paginate(3));
+    }
+
+    public function storePost(StorePostRequest $request) {
+        $validated = $request->validated();
+        $cover_image_path = '';
+
+        $post = Post::factory()->create([
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'text' => $validated['text'],
+            'cover_image_path' => $cover_image_path === '' ? null : $cover_image_path,
+            'author_id' => $request->user()->id,
+        ]);
+        isset($validated['categories']) ? $post->categories()->sync($validated['categories']) : "";
+        return response(new PostResource($post->load('author')->load('categories')),201);
+    }
+
+
+    public function updatePost(UpdatePostRequest $request,$id) {
+        $validated = $request->validated();
+        $cover_image_path = '';
+        $post = Post::findOrFail($id);
+
+        $post->title = $validated['title'];
+        $post->description = $validated['description'];
+        $post->text = $validated['text'];
+        $post->cover_image_path = ($cover_image_path === '' ? null : $cover_image_path);
+        $post->save();
+        isset($validated['categories']) ? $post->categories()->sync($validated['categories']) : "";
+
+        return response(new PostResource($post->load('author')->load('categories')),201);
+     }
+
 
 }

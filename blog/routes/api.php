@@ -14,11 +14,26 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('categories',       [ApiController::class,'store'])                             ->name('api.categories.store');    
     Route::put('categories/{id}',   [ApiController::class,'update'])    ->where('id','[0-9]+')  ->name('api.categories.update');    
-    Route::delete('categories/{id}',[ApiController::class,'destroy'])   ->where('id','[0-9]+')  ->name('api.categories.destroy');    
+    Route::delete('categories/{id}',[ApiController::class,'destroy'])   ->where('id','[0-9]+')  ->name('api.categories.destroy');
+
+    Route::post('posts',            [ApiController::class,'storePost'])                         ->name('api.categories.storePost');    
+    Route::put('posts/{id}',        [ApiController::class,'updatePost'])->where('id','[0-9]+')  ->name('api.categories.updatePost');
+
+    // HF: végpont, amely lekéri azokat a usereket, akiknek van posztja az adott kategóriában
+    Route::get('usersByCat',        [ApiController::class, 'usersByCat'])                       ->name('api.posts.usersByCat');
+
 });
 
 
-Route::get('categories/{id?}',[ApiController::class, 'getCategories'])->where('id','[0-9]+')->name('api.categories.getCategories');
+Route::get('categories/{id?}',  [ApiController::class, 'getCategories'])->where('id','[0-9]+')  ->name('api.categories.getCategories');
+
+Route::get('posts/{id?}',       [ApiController::class, 'getPosts'])->where('id','[0-9]+')       ->name('api.posts.getPosts');
+Route::get('postsPaginated',    [ApiController::class, 'postsPaginated'])                       ->name('api.posts.postsPaginated');
+
+// HF: related posts végpont, amely lekéri egy post id-ja alapján azokat a postokat, amelyeknek van közös kategóriája az id által meghatározott posttal.
+Route::get('relatedPosts/{id}', [ApiController::class, 'relatedPosts'])->where('id','[0-9]+')   ->name('api.posts.relatedPosts');
+
+
 
 // Route::get('uri-params1/{number}/{string}/{optional?}',function ($number,$string,$optional = null){
 //     return response()->json([
