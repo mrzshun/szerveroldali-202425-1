@@ -183,5 +183,15 @@ class ApiController extends Controller
         return response(new PostResource($post->load('author')->load('categories')),201);
      }
 
+     public function relatedPosts(Request $request, $id) {
+        $post = Post::findOrFail($id);
+        $categories = $post->categories;
+        $relatedPosts = collect([]);
+        foreach($categories as $c) {
+            $relatedPosts = $relatedPosts->concat($c->posts);
+        }
+        $relatedPosts = $relatedPosts->unique("id");
+        return response($relatedPosts,201);
+     }
 
 }

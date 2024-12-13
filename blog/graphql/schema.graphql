@@ -1,0 +1,93 @@
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+enum Style {
+  primary
+  secondary
+  success
+  danger
+  warning
+  info
+  dark
+}
+
+"Indicates what fields are available at the top level of a query operation."
+type Query {
+    "Find a single user by an identifying attribute."
+    user(
+      "Search by primary key."
+      id: ID @eq @rules(apply: ["prohibits:email", "required_without:email"])
+
+      "Search by email address."
+      email: String @eq @rules(apply: ["prohibits:id", "required_without:id", "email"])
+    ): User @find
+
+    "List multiple users."
+    users: [User!]! @all
+
+    posts: [Post!] @all
+
+    categories: [Category!] @all
+    category(id: Int! @eq): Category @find
+    alma: String!
+    relatedPosts(id: Int!): [Post]
+    # relatedPosts(id: Int!): String
+}
+
+type Mutation {
+  createCategory(name: String!, style: Style!): Category! @create
+  createCategory2(input: CreateCategoryInput @spread): Category! @create
+  updateCategory(id: ID!, name: String!, style: Style!): Category! @update
+  deleteCategory(id: ID! @whereKey): Category @delete
+  upsertCategory(id: ID, name: String!, style: Style!): Category! @upsert
+
+  createUser(
+    name: String!,
+    email: String! @rules(apply:["email"]),
+    password: String! @rules(apply:["min:5"])
+  ): User! @create
+}
+
+"Account of a person who utilizes this application."
+type User {
+    "Unique primary key."
+    id: ID!
+
+    "Non-unique name."
+    name: String!
+
+    "Unique email address."
+    email: String!
+
+    "When the email was verified."
+    email_verified_at: DateTime
+
+    "When the account was created."
+    created_at: DateTime!
+
+    "When the account was last updated."
+    updated_at: DateTime!
+
+    posts: [Post!] @hasMany
+}
+
+type Post {
+  id: ID!
+  title: String!
+  description: String!
+  text: String!
+  author: User @belongsTo
+  categories: [Category!] @belongsToMany
+}
+
+type Category {
+  id: ID!
+  name: String!
+  style: Style!
+  posts: [Post!] @belongsToMany
+}
+
+input CreateCategoryInput {
+  name: String!
+  style: Style!
+}
